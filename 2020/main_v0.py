@@ -130,30 +130,30 @@ def main():
 
     radixSort(all_libs)
 
-    print(len(all_libs))
+    ##print(len(all_libs))
     #for x in all_libs:
-        #print("%d " % x.id, end='')
+        ##print("%d " % x.id, end='')
 
     librerias = []
     librerias_len = 0
     error = 10
     for i in all_libs:
         if i.signup < days:
-            #print(i.id)
+            ##print(i.id)
             librerias.append([i, []])
             librerias_len += 1
             days -= i.signup
 
-            print("Total", i.total_b)
+            ##print("Total", i.total_b)
 
             res = i.buscarXbest()
 
 
-            print("Libros reps", len(res))
+            #print("Libros reps", len(res))
             res = delete_book(res)
 
             j = 0
-            #print(days*i.books_day, "|", len(res))
+            ##print(days*i.books_day, "|", len(res))
             while j < days*i.books_day and j < len(res):
                 librerias[librerias_len-1][1].append(res[j])
                 j += 1
