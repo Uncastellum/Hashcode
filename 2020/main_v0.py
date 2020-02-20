@@ -28,15 +28,16 @@ books_score = None
 all_libs = None
 
 
+
 class Library(object):
     """docstring for Library."""
-    def __init__(self, id, total_b, singup, books_day, books):
+    def __init__(self, id, total_b, signup, books_day, books):
         self.id = id
         self.total_b = total_b
-        self.singup = singup
+        self.signup = signup
         self.books_day = books_day
         self.books = books
-        self.total = (days-self.singup)*self.books_day
+        self.total = (days-self.signup)*self.books_day
         self.score = 0
         for i in self.books:
             self.score += books_score[i]
@@ -45,7 +46,7 @@ class Library(object):
         string = '{0} {1} {2}\n{3}\n'
         return string.format(
             self.total_b,
-            self.singup,
+            self.signup,
             self.books_day,
             ''.join('%s ' % i for i in self.books)
         )
@@ -64,7 +65,7 @@ class Library(object):
     	encontrado = False
     	while i < long and not encontrado:
     		if books_score[dato] >= books_score[i]:
-    			vector.insert(i)
+    			vector.insert(i, dato)
     			encontrado = True
     		else:
     			i+=1
@@ -80,7 +81,7 @@ class Library(object):
     		else:
     			res = self._insertOrd(res, i, len)
     			len += 1
-    			if len >= self.total*3:
+    			if len >= self.total*10:
     				return res
     	return res
 
@@ -100,24 +101,30 @@ with open(input) as f_in:
         id += 1
         #matrix.append([x for x in line]) #TTTTT
 
+repeat_book = [False]*books_norep
+
 def delete_book(list_book):
     non_repeated_books = []
     for libro in list_book:
-        if not repeat_book(libro):
+        if not repeat_book[libro]:
             non_repeated_books.append(libro)
 
     return non_repeated_books
 
 def resulttofile(res):
     with open(output_file, 'w') as f_out:
-        f_out.write(len(res)+"\n")
+        f_out.write(str(len(res))+"\n")
         for item in res:
-            f_out.write("%d %d" % (item[0].id, len(item[1])))
+            f_out.write("%d %d\n" % (item[0].id, len(item[1])))
+            for element in item[1]:
+                f_out.write("%d " % element)
             f_out.write("\n")
             #for subitem in item:
 
 
 def main():
+    global days
+
     radixSort(all_libs)
 
     print(len(all_libs))
@@ -129,18 +136,22 @@ def main():
     error = 10
     for i in all_libs:
         if i.signup <= days:
+            print(i.id)
             librerias.append([i, []])
             librerias_len += 1
             days -= i.signup
 
             res = i.buscarXbest()
 
+
+            print("Libros reps", len(res))
             res = delete_book(res)
 
             j = 0
-
+            print(days*i.books_day, "|", len(res))
             while j < days*i.books_day:
                 librerias[librerias_len-1][1].append(res[j])
+                j += 1
 
         else:
             error -= 1
