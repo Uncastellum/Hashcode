@@ -64,7 +64,7 @@ class Library(object):
     	i = 0
     	encontrado = False
     	while i < long and not encontrado:
-    		if books_score[dato] >= books_score[i]:
+    		if books_score[dato] > books_score[i]:
     			vector.insert(i, dato)
     			encontrado = True
     		else:
@@ -135,11 +135,13 @@ def main():
     librerias_len = 0
     error = 10
     for i in all_libs:
-        if i.signup <= days:
+        if i.signup < days:
             print(i.id)
             librerias.append([i, []])
             librerias_len += 1
             days -= i.signup
+
+            print("Total", i.total_b)
 
             res = i.buscarXbest()
 
