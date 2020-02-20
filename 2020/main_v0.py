@@ -69,7 +69,9 @@ class Library(object):
                 encontrado = True
             else:
                 i+=1
-        vector.append(dato)
+        
+        if not encontrado:
+            vector.append(dato)
         return vector
 
     def buscarXbest(self):
@@ -142,12 +144,12 @@ def main():
             librerias_len += 1
             days -= i.signup
 
-            #print("Total", i.total_b)
+            print("Total", i.total_b)
 
             res = i.buscarXbest()
 
 
-            #print("Libros reps", len(res))
+            print("Libros reps", len(res))
             res = delete_book(res)
 
             j = 0
