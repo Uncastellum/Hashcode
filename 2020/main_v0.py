@@ -22,6 +22,21 @@ if len(args) != 0:
 input = 'input/' + files[index]
 output_file = 'output_' + ['a', 'b', 'c', 'd', 'e', 'f'][index] + '.out'
 
+with open(input) as f_in:
+    #read first line
+    books_norep, libs, days = [int(x) for x in next(f_in).split()]
+    books_score = [int(x) for x in next(f_in).split()]
+    all_libs = []
+    id = 0
+    for line in f_in: # read rest of lines
+        if len(line.replace('\n','')) is 0:
+            continue
+        b, d, s = [int(x) for x in line.split()]#next(f_in).split()]
+        books = [int(x) for x in next(f_in).split()]#next(f_in).split()]
+        all_libs.append(Libary(id,b,d,s,books))
+        id += 0
+        #matrix.append([x for x in line]) #TTTTT
+
 class Libary(object):
     """docstring for Libary."""
     def __init__(self, id, total_b, singup, books_day, books):
@@ -30,6 +45,10 @@ class Libary(object):
         self.singup = singup
         self.books_day = books_day
         self.books = books
+        self.score = 0
+        for i in self.books:
+            pass
+
 
     def __str__(self):
         string = '{0} {1} {2}\n{3}\n'
@@ -40,18 +59,22 @@ class Libary(object):
             ''.join('%s ' % i for i in self.books)
         )
 
-with open(input) as f_in:
-    #read first line
-    books_norep, libs, days = [int(x) for x in next(f_in).split()]
-    books_score = [int(x) for x in next(f_in).split()]
-    all_libs = []
-    id = 0
-    for line in f_in: # read rest of lines
-        b, d, s = [int(x) for x in line.split()]#next(f_in).split()]
-        books = [int(x) for x in next(f_in).split()]#next(f_in).split()]
-        all_libs.append(Libary(id,b,d,s,books))
-        id += 0
-        #matrix.append([x for x in line]) #TTTTT
+    def __gt__(self, other):
+        pass
+
+    def __lt__(self, other):
+        pass
+
+    def __eq__(self, other):
+        return self.id == other.id
+
+def delete_book(list_book):
+    non_repeated_books = []
+    for libro in list_book:
+        if not repeat_book(libro):
+            non_repeated_books.append(libro)
+
+    return non_repeated_books
 
 
 def resulttofile(res):
