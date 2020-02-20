@@ -47,8 +47,7 @@ class Libary(object):
         self.books = books
         self.score = 0
         for i in self.books:
-            pass
-
+            self.score += books_score[i]
 
     def __str__(self):
         string = '{0} {1} {2}\n{3}\n'
@@ -60,10 +59,10 @@ class Libary(object):
         )
 
     def __gt__(self, other):
-        pass
+        return self.score>other.score
 
     def __lt__(self, other):
-        pass
+        return self.score<other.score
 
     def __eq__(self, other):
         return self.id == other.id
