@@ -82,7 +82,6 @@ class Library(object):
         self.score = 0
         for i in self.books:
             self.score += books_score[i]
-        self.heur = self.signup
 
     def __str__(self):
         string = '{0} {1} {2}\n{3}\n'
@@ -93,11 +92,15 @@ class Library(object):
             ''.join('%s ' % i for i in self.books)
         )
 
+    @property
+    def heur(self):
+        return (days-self.signup)*self.books_day/self.score
+
     def __gt__(self, other):
-        return self.heur<other.heur
+        return self.heur>other.heur
 
     def __lt__(self, other):
-        return self.heur>other.heur
+        return self.heur<other.heur
 
     def __eq__(self, other):
         return self.id == other.id
@@ -169,6 +172,7 @@ def resulttofile(res):
 
 def main():
     global days
+    orig_days = days
 
     radixSort(all_libs)
 
@@ -179,16 +183,19 @@ def main():
     librerias = []
     librerias_len = 0
     error = 10
-    for i in all_libs:
-        if i.signup < days:
+
+    for i in range(len(all_libs)):
+        if days-all_libs[i%len(all_libs)].signup > orig_days/2:
+            radixSort(all_libs)
+        if all_libs[i%len(all_libs)].signup < days:
             ##print(i.id)
-            librerias.append([i, []])
+            librerias.append([all_libs[i%len(all_libs)], []])
             librerias_len += 1
-            days -= i.signup
+            days -= all_libs[i%len(all_libs)].signup
 
             ##print("Total", i.total_b)
 
-            res = i.buscarXbest()
+            res = all_libs[i%len(all_libs)].buscarXbest()
 
 
             #print("Libros reps", len(res))
@@ -196,10 +203,10 @@ def main():
 
             j = 0
             ##print(days*i.books_day, "|", len(res))
-            while j < days*i.books_day and j < len(res):
+            while j < days*all_libs[i%len(all_libs)].books_day and j < len(res):
                 librerias[librerias_len-1][1].append(res[j])
                 j += 1
-
+            all_libs.remove(all_libs[i%len(all_libs)])
         else:
             error -= 1
             if error == 0:
