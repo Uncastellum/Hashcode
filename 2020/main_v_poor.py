@@ -64,7 +64,7 @@ class Library(object):
     	encontrado = False
     	while i < long and not encontrado:
     		if books_score[dato] >= books_score[i]:
-    			vector.insert(i)
+    			vector.insert(i, dato)
     			encontrado = True
     		else:
     			i+=1
@@ -108,16 +108,20 @@ def delete_book(list_book):
 
     return non_repeated_books
 
-def resulttofile(res):
+def resulttofile(l, res):
     with open(output_file, 'w') as f_out:
+        f_out.write("%d\n" % l)
         for item in res:
             for subitem in item:
-                f_out.write("%d " % subitem)
-            f_out.write("\n")
+                #print(subitem)
+                for subsubitem in subitem:
+                    f_out.write("%d " % subsubitem)
+                f_out.write("\n")
             #
 
 
 def main():
+    global days
     radixSort(all_libs)
 
     print(len(all_libs))
@@ -125,11 +129,17 @@ def main():
         #print("%d " % x.id, end='')
 
     output = []
+    libs = 0
     for i in all_libs:
+        days -= i.singup
+        if days < 0:
+            break
+        #days -= len(res)
         res = i.buscarXbest()
         output.append([[i.id, len(res)], res])
-
-    resulttofile(output)
+        libs +=1 
+        
+    resulttofile(libs, output)
 
 
 if __name__ == '__main__':
