@@ -61,29 +61,30 @@ class Library(object):
         return self.id == other.id
 
     def _insertOrd(self, vector, dato, long):
-    	i = 0
-    	encontrado = False
-    	while i < long and not encontrado:
-    		if books_score[dato] > books_score[i]:
-    			vector.insert(i, dato)
-    			encontrado = True
-    		else:
-    			i+=1
-    	return vector
+        i = 0
+        encontrado = False
+        while i < long and not encontrado:
+            if books_score[dato] > books_score[i]:
+                vector.insert(i, dato)
+                encontrado = True
+            else:
+                i+=1
+        vector.append(dato)
+        return vector
 
     def buscarXbest(self):
-    	len = 0
-    	res = []
-    	for i in self.books:
-    		if len == 0:
-    			res.append(i)
-    			len += 1
-    		else:
-    			res = self._insertOrd(res, i, len)
-    			len += 1
-    			if len >= self.total*10:
-    				return res
-    	return res
+        len = 0
+        res = []
+        for i in self.books:
+            if len == 0:
+                res.append(i)
+                len += 1
+            else:
+                res = self._insertOrd(res, i, len)
+                len += 1
+                if len >= self.total*10:
+                    return res
+        return res
 
 
 with open(input) as f_in:
@@ -136,22 +137,22 @@ def main():
     error = 10
     for i in all_libs:
         if i.signup < days:
-            print(i.id)
+            #print(i.id)
             librerias.append([i, []])
             librerias_len += 1
             days -= i.signup
 
-            print("Total", i.total_b)
+            #print("Total", i.total_b)
 
             res = i.buscarXbest()
 
 
-            print("Libros reps", len(res))
+            #print("Libros reps", len(res))
             res = delete_book(res)
 
             j = 0
-            print(days*i.books_day, "|", len(res))
-            while j < days*i.books_day:
+            #print(days*i.books_day, "|", len(res))
+            while j < days*i.books_day and j < len(res):
                 librerias[librerias_len-1][1].append(res[j])
                 j += 1
 
