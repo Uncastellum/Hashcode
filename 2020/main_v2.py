@@ -82,7 +82,7 @@ class Library(object):
         self.score = 0
         for i in self.books:
             self.score += books_score[i]
-        self.heur = self.score/self.total
+        self.heur = self.signup
 
     def __str__(self):
         string = '{0} {1} {2}\n{3}\n'
@@ -94,10 +94,10 @@ class Library(object):
         )
 
     def __gt__(self, other):
-        return self.heur>other.heur
+        return self.heur<other.heur
 
     def __lt__(self, other):
-        return self.heur<other.heur
+        return self.heur>other.heur
 
     def __eq__(self, other):
         return self.id == other.id
