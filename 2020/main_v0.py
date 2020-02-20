@@ -59,11 +59,11 @@ class Library(object):
     def __eq__(self, other):
         return self.id == other.id
 
-    def _insertOrd(vector, dato, long):
+    def _insertOrd(self, vector, dato, long):
     	i = 0
     	encontrado = False
     	while i < long and not encontrado:
-    		if books_score[dato] >= puntuacion[i]:
+    		if books_score[dato] >= books_score[i]:
     			vector.insert(i)
     			encontrado = True
     		else:
@@ -78,7 +78,7 @@ class Library(object):
     			res.append(i)
     			len += 1
     		else:
-    			res = _insertOrd(res, i, len)
+    			res = self._insertOrd(res, i, len)
     			len += 1
     			if len >= self.total*3:
     				return res
@@ -110,8 +110,9 @@ def delete_book(list_book):
 
 def resulttofile(res):
     with open(output_file, 'w') as f_out:
+        f_out.write(len(res)+"\n")
         for item in res:
-            f_out.write("%s" % item)
+            f_out.write("%d %d" % (item[0].id, len(item[1])))
             f_out.write("\n")
             #for subitem in item:
 
@@ -123,12 +124,31 @@ def main():
     #for x in all_libs:
         #print("%d " % x.id, end='')
 
-    output = []
+    librerias = []
+    librerias_len = 0
+    error = 10
     for i in all_libs:
-        res = i.buscarXbest()
+        if i.signup <= days:
+            librerias.append([i, []])
+            librerias_len += 1
+            days -= i.signup
+
+            res = i.buscarXbest()
+
+            res = delete_book(res)
+
+            j = 0
+
+            while j < days*i.books_day:
+                librerias[librerias_len-1][1].append(res[j])
+
+        else:
+            error -= 1
+            if error == 0:
+                break
 
 
-    resulttofile(output)
+    resulttofile(librerias)
 
 
 if __name__ == '__main__':
