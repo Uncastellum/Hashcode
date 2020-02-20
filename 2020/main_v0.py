@@ -1,5 +1,6 @@
 import os, sys
 #import numpy as np
+from radixsort import radixSort
 
 files = [
     'a_example.txt',
@@ -22,29 +23,20 @@ if len(args) != 0:
 input = 'input/' + files[index]
 output_file = 'output_' + ['a', 'b', 'c', 'd', 'e', 'f'][index] + '.out'
 
-with open(input) as f_in:
-    #read first line
-    books_norep, libs, days = [int(x) for x in next(f_in).split()]
-    books_score = [int(x) for x in next(f_in).split()]
-    all_libs = []
-    id = 0
-    for line in f_in: # read rest of lines
-        if len(line.replace('\n','')) is 0:
-            continue
-        b, d, s = [int(x) for x in line.split()]#next(f_in).split()]
-        books = [int(x) for x in next(f_in).split()]#next(f_in).split()]
-        all_libs.append(Libary(id,b,d,s,books))
-        id += 0
-        #matrix.append([x for x in line]) #TTTTT
+books_norep, libs, days = 0,0,0
+books_score = None
+all_libs = None
 
-class Libary(object):
-    """docstring for Libary."""
+
+class Library(object):
+    """docstring for Library."""
     def __init__(self, id, total_b, singup, books_day, books):
         self.id = id
         self.total_b = total_b
         self.singup = singup
         self.books_day = books_day
         self.books = books
+        self.total = (days-self.singup)*self.books_day
         self.score = 0
         for i in self.books:
             self.score += books_score[i]
@@ -67,6 +59,47 @@ class Libary(object):
     def __eq__(self, other):
         return self.id == other.id
 
+    def _insertOrd(vector, dato, long):
+    	i = 0
+    	encontrado = False
+    	while i < long and not encontrado:
+    		if books_score[dato] >= puntuacion[i]:
+    			vector.insert(i)
+    			encontrado = True
+    		else:
+    			i+=1
+    	return vector
+
+    def buscarXbest(self):
+    	len = 0
+    	res = []
+    	for i in self.books:
+    		if len == 0:
+    			res.append(i)
+    			len += 1
+    		else:
+    			res = _insertOrd(res, i, len)
+    			len += 1
+    			if len >= self.total*3:
+    				return res
+    	return res
+
+
+with open(input) as f_in:
+    #read first line
+    books_norep, libs, days = [int(x) for x in next(f_in).split()]
+    books_score = [int(x) for x in next(f_in).split()]
+    all_libs = []
+    id = 0
+    for line in f_in: # read rest of lines
+        if len(line.replace('\n','')) is 0:
+            continue
+        b, d, s = [int(x) for x in line.split()]#next(f_in).split()]
+        books = [int(x) for x in next(f_in).split()]#next(f_in).split()]
+        all_libs.append(Library(id,b,d,s,books))
+        id += 1
+        #matrix.append([x for x in line]) #TTTTT
+
 def delete_book(list_book):
     non_repeated_books = []
     for libro in list_book:
@@ -74,7 +107,6 @@ def delete_book(list_book):
             non_repeated_books.append(libro)
 
     return non_repeated_books
-
 
 def resulttofile(res):
     with open(output_file, 'w') as f_out:
@@ -85,8 +117,18 @@ def resulttofile(res):
 
 
 def main():
+    radixSort(all_libs)
+
     print(len(all_libs))
-    resulttofile(all_libs)
+    #for x in all_libs:
+        #print("%d " % x.id, end='')
+
+    output = []
+    for i in all_libs:
+        res = i.buscarXbest()
+
+
+    resulttofile(output)
 
 
 if __name__ == '__main__':
