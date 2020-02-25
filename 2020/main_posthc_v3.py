@@ -74,8 +74,20 @@ class Library(object):
         for i in self.books:
             self.score += books_score[i]
             self.total_books += 1
-        self.max_books = self.speed * (days-self.signup_days)
-        self.score_alex = (self.different_books*(self.score/self.total_books)*self.max_books)/self.signup_days
+        self.max_books = min(self.speed * (days-self.signup_days),self.total_books)
+        self.score_alex = (self.score*self.max_books)/self.signup_days
+
+    def getScore(self):
+        return self.score_alex
+
+    def updateScore(self):
+        self.score = 0
+        self.total_books = 0
+        for i in self.books:
+            self.score += books_score[i]
+            self.total_books += 1
+        self.max_books = min(self.speed * (days-self.signup_days),self.total_books)
+        self.score_alex = (self.score*self.max_books)/self.signup_days
 
     def __str__(self):
         string = '{0} {1} {2}\n{3}\n'
@@ -125,8 +137,6 @@ class Library(object):
             else:
                 res = self._insertOrd(res, i, len)
                 len += 1
-                if len >= self.max_books*10:
-                    return res
         return res
 
 
@@ -151,11 +161,13 @@ with open(input) as f_in:
 repeat_book = [False]*books_norep
 
 def delete_book(list_book):
+    global repeat_book
     non_repeated_books = []
     for libro in list_book:
         if not repeat_book[libro]:
             non_repeated_books.append(libro)
-            repeat_book[libro] = True
+            #print("Meto libro", libro)
+            #repeat_book[libro] = True
 
     return non_repeated_books
 
@@ -168,32 +180,79 @@ def resulttofile(res):
                 f_out.write("%d " % element)
             f_out.write("\n")
 
+def getBestLib(all_libs):
+    if(len(all_libs) == 0):
+        return None, all_libs, 0
+    
+    best = all_libs[0]
+    new_libs = []
+    new_libs_len = 0
+    for i in all_libs:
+        if (i.signup_days >= days ):
+            continue
+        
+        if(i.score_alex > best.score_alex):
+            new_libs.append(best)
+            best = i
+        else:
+            new_libs.append(i)
+        new_libs_len += 1
+    return best, new_libs, new_libs_len
+
+def funGetBestLib(all_libs):
+    if(len(all_libs) == 0):
+        return None, all_libs, 0
+    best = all_libs[0]
+    best.books = delete_book(best.books)
+    new_libs = []
+    new_libs_len = 0
+    del all_libs[0]
+    for i in all_libs:
+        if (i.signup_days >= days ):
+            continue
+        i.books = delete_book(i.books)
+        if(i.books == []):
+            continue
+        i.updateScore()
+        if(i.score_alex > best.score_alex):
+            new_libs.append(best)
+            best = i
+        else:
+            new_libs.append(i)
+        new_libs_len += 1
+    if (best.books == [] or best.signup_days >= days):
+        best = None
+    return best, new_libs, new_libs_len
+
+
 def main():
     global days
-    mergeSort(all_libs)
+    global all_libs
+    global repeat_book
     librerias = []
     librerias_len = 0
-    error = len(all_libs)
+    sigue = True
+    while sigue:
+        best_lib, all_libs, all_libs_len = funGetBestLib(all_libs)
+        if(best_lib is None):
+            sigue = False
+            continue
+        #print(all_libs_len)
+        librerias.append([best_lib, []])
+        librerias_len += 1
+        days -= best_lib.signup_days
 
-    for i in all_libs:
-        #template = '{:<5d}{:<6d}{:<6d}{:<10d} {:<5f}'
-        #print(template.format(i.id, i.different_books, i.signup_days, i.score, i.score_alex))
-        if i.signup_days < days:
-            i.books = delete_book(i.books)
-            res = i.buscarXbest()
-            if len(res) == 0:
-                continue
-            librerias.append([i, []])
-            librerias_len += 1
-            days -= i.signup_days
-            j = 0
-            while j < days*i.speed and j < len(res):
-                librerias[librerias_len-1][1].append(res[j])
-                j += 1
-        else:
-            error -= 1
-            if error == 0:
-                break
+        res = best_lib.buscarXbest()
+
+        if len(res) == 0:
+            continue
+
+        j = 0
+        while j < days*best_lib.speed and j < len(res):
+            librerias[librerias_len-1][1].append(res[j])
+            repeat_book[res[j]] = True
+            j += 1
+
     resulttofile(librerias)
 
 if __name__ == '__main__':
