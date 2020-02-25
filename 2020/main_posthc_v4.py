@@ -60,6 +60,39 @@ def mergeSort(arr):
             j+=1
             k+=1
 
+def mergeScoreSort(arr):
+    if len(arr) >1:
+        mid = len(arr)//2 #Finding the mid of the array
+        L = arr[:mid] # Dividing the array elements
+        R = arr[mid:] # into 2 halves
+
+        mergeSort(L) # Sorting the first half
+        mergeSort(R) # Sorting the second half
+
+        i = j = k = 0
+
+        # Copy data to temp arrays L[] and R[]
+        while i < len(L) and j < len(R):
+            if L[i].score_alex > R[j].score_alex:
+                arr[k] = L[i]
+                i+=1
+            else:
+                arr[k] = R[j]
+                j+=1
+            k+=1
+
+        # Checking if any element was left
+        while i < len(L):
+            arr[k] = L[i]
+            i+=1
+            k+=1
+
+        while j < len(R):
+            arr[k] = R[j]
+            j+=1
+            k+=1
+
+
 def getMaxBook(book_list):
     if(len(book_list) == 0):
         return None, book_list
@@ -120,7 +153,7 @@ class Library(object):
         return self.score//other
 
     def __gt__(self, other):
-        return self.score_alex<other.score_alex
+        return self.signup_days>other.signup_days
 
     def __lt__(self, other):
         return not self>other and not self==other
@@ -149,8 +182,11 @@ class Library(object):
         best_books = []
         while i < self.max_books:
             b_book, temp_book_list = getMaxBook(temp_book_list)
-            best_books.append(b_book)
-            i+=1
+            if (b_book is not None):
+                best_books.append(b_book)
+                i+=1
+            else:
+                break
         
         return best_books
 
@@ -226,15 +262,37 @@ def main():
     global days
     global all_libs
     global repeat_book
+    #Ordena librerias por menor tiempo de signup
+    mergeSort(all_libs)
+    local_days=days
+    max_l = 0
+    for e in all_libs:
+        if(local_days - e.signup_days >= 0):
+            print("days: ", local_days, "signup: ", e.signup_days)
+            local_days-=e.signup_days
+            max_l +=1
+        else:
+            break
+
+    #Vamos a poder elegir como maximo, max_l
+    #Elegimos las max_l mejores librerias ordenadas por score_alex
+    
+    #
+    mergeScoreSort(all_libs)
+
+    all_libs = all_libs[:(max_l*2)]
+
     librerias = []
     librerias_len = 0
     sigue = True
+    seleccionadas = 0
     while sigue:
         best_lib, all_libs, all_libs_len = funGetBestLib(all_libs)
         if(best_lib is None):
             sigue = False
             continue
-        print(all_libs_len)
+        seleccionadas +=1
+        print("Seleccionadas:", seleccionadas, "Restantes",all_libs_len)
         librerias.append([best_lib, []])
         librerias_len += 1
         days -= best_lib.signup_days
