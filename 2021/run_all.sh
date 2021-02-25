@@ -1,6 +1,6 @@
 #!/bin/bash
 
-main=main.py
+main=main_v0.py
 echo "Running all for $main"
 
 python3 $main 1
