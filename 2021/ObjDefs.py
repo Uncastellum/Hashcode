@@ -71,23 +71,27 @@ def calcularPeso(street):
 def heuristica(time, coches):
     if coches == 0:
         return 0
-    return m.log(1 + time) * m.log(1 + coches)
+    return coches
 
 
 def asignarTiempo(interseccion, simulation_time):
 
-    s_time = simulation_time
+    s_time = 0
     suma = 0
+    max_tiempo = -1
     # First pass - calculate weights
     for calle in interseccion:
         if(calle.peso > 0):
             suma += calle.peso
+            s_time += 2
     # Second pass - normalize weights
     for calle in interseccion:
         if(calle.peso > 0):
             calle.peso = calle.peso / suma
         # Calculate seconds in green per cycle
-        calle.tiempo_final = min(calle.peso * s_time, calle.time)
+        calle.tiempo_final = max(calle.peso * s_time, 1)
+        max_tiempo = max(max_tiempo, calle.tiempo_final)
+
 
 def asignarTiempoDumb(interseccion, simulation_time):
     s_time = simulation_time
