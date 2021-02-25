@@ -36,7 +36,7 @@ class Grafo(object):
             # list_streets es una lista con instancias de Street
             on_representation = False
             for street in list_streets:
-                if street.tiempo_final > 0:
+                if round(street.tiempo_final) > 0:
                     if not on_representation:
                         final[it1] = [street]
                         on_representation = True
