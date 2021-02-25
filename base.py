@@ -15,7 +15,7 @@ if len(args) != 0:
     file = args[0]
     if file in ['a', 'b', 'c', 'd', 'e']:
         index = ['a', 'b', 'c', 'd', 'e'].index(file)
-    elif path in ['1', '2', '3', '4', '5']:
+    elif file in ['1', '2', '3', '4', '5']:
         index = ['1', '2', '3', '4', '5'].index(file)
 
 input = 'input/' + files[index]
