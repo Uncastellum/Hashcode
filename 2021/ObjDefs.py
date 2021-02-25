@@ -76,7 +76,7 @@ def heuristica(time, coches):
 
 def asignarTiempo(interseccion, simulation_time):
 
-    s_time = simulation_time
+    s_time = simulation_time / 5
     suma = 0
     # First pass - calculate weights
     for calle in interseccion:
