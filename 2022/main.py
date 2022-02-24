@@ -1,5 +1,7 @@
 import os, sys
+import selector
 from radixsort import *
+
 
 files = [
     'a_an_example.in.txt',
@@ -24,27 +26,24 @@ projects = []
 
 
 class Skill:
-
     def __init__(self, skill_name, skill_level):
         self.skill_name = skill_name
         self.skill_level = skill_level
 
 class Contributor:
-    skills = [Skill]
-
     def __init__(self, name):
         self.name = name
+        self.skills = {}
 
 class Project:
-    #skills = [Skill]
-
     def __init__(self, name, days, score, best_before, n_roles):
         self.name = name
         self.days = days
         self.score = score
         self.best_before = best_before
         self.n_roles = n_roles
-        self.skills = []
+        self.listaPersonas = []
+        self.skills = {}
 
 
 class ProjectProgram:
@@ -78,7 +77,7 @@ with open(input) as f_in:
         for _ in range(n_skills):
             # Read skills from contributor
             skill_name, skill_level = [x for x in next(f_in).split()]
-            new_contributor.skills.append(Skill(skill_name, skill_level))
+            new_contributor.skills[skill_name] = int(skill_level)
         # Add contributor
         contributors.append(new_contributor)
     for _ in range(n_projects):
@@ -93,7 +92,7 @@ with open(input) as f_in:
             # Read project info
             skill_name, skill_level = [x for x in next(f_in).split()]
             skill_level = int(skill_level)
-            new_project.skills.append(Skill(skill_name, skill_level))
+            new_project.skills[skill_name] = int(skill_level)
         projects.append(new_project)
         pass
 
@@ -115,8 +114,10 @@ def main():
     radixSort(projects, lambda x: x.best_before)
     print([x.best_before for x in projects])
 
-    # Calculate solution
+    selector.elegirProyecto(projects, contributors)
 
+    # Calculate solution
+    """
     result = Result(n_projects)
     # Iterate through projects
     for project in projects:
@@ -128,6 +129,7 @@ def main():
         result.projects_programs.append(new_project_program)
 
     result_to_file(result)
+    """
 
 
 if __name__ == '__main__':

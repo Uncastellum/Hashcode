@@ -18,7 +18,6 @@ def selector(skill, listaPersonas):
 def proyectSelector(proyecto, listaPersonas):
     for skill in proyecto.skills:
         persona = selector((skill, proyecto.skills[skill]), listaPersonas)
-        print(proyecto.name, len(listaPersonas))
         if persona == None:
             for p in proyecto.listaPersonas:
                 listaPersonas.append(p)
@@ -33,4 +32,3 @@ def elegirProyecto(listaProyectos, listaPersonas):
         if proyectSelector(proyecto, listaPersonas):
             proyectOutput.append(proyecto)
     return proyectOutput
-
