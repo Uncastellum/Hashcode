@@ -2,7 +2,6 @@ import os, sys
 import selector
 from radixsort import *
 
-
 files = [
     'a_an_example.in.txt',
     'b_better_start_small.in.txt',
@@ -115,12 +114,31 @@ def main():
 
     # Sort projects
     radixSort(projects, lambda x: x.alex_score)
-    print([x.alex_score for x in projects])
+    print([x.best_before for x in projects])
+    indiceWhile = 0
+    activeProjects = []
+    output = []
+    while(len(projects) != 0):
 
-    selector.elegirProyecto(projects, contributors)
+        for project in activeProjects:
+            if project.days <= 0:
+                for persona in project.personas:
+                    contributors.append(persona)
 
-    # Calculate solution
-    result_to_file(output)
+                output.append(project)
+            else:
+                project.days -= 1
+
+
+        (activeProjects,projects) = selector.elegirProyecto(projects, contributors)
+
+        for i in range(len(projects), 0):
+            if projects[i].best_before < indiceWhile - projects[i].days:
+                projects.pop(i)
+
+
+        indiceWhile += 1
+
 
 
 if __name__ == '__main__':
