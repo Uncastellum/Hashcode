@@ -29,7 +29,6 @@ class Skill:
         self.skill_name = skill_name
         self.skill_level = skill_level
 
-
 class Contributor:
     skills = [Skill]
 
@@ -37,7 +36,7 @@ class Contributor:
         self.name = name
 
 class Project:
-    skills = [Skill]
+    #skills = [Skill]
 
     def __init__(self, name, days, score, best_before, n_roles):
         self.name = name
@@ -45,6 +44,7 @@ class Project:
         self.score = score
         self.best_before = best_before
         self.n_roles = n_roles
+        self.skills = []
 
 
 class ProjectProgram:
@@ -56,10 +56,11 @@ class ProjectProgram:
         self.contributors = []
 
 class Result:
-    projects_programs = [ProjectProgram]
+    #projects_programs = [ProjectProgram]
 
     def __init__(self, n_projects):
         self.n_projects = n_projects
+        self.projects_programs = []
 
 
 
