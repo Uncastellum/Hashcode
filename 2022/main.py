@@ -1,7 +1,4 @@
 import os, sys
-from ObjDefs import *
-
-# import numpy as np
 
 files = [
     'a_an_example.in.txt',
@@ -26,6 +23,7 @@ projects = []
 
 
 class Project:
+    skills = []
 
     def __init__(self, name, days, score, best_before, n_roles):
         self.name = name
@@ -69,7 +67,13 @@ with open(input) as f_in:
         contributors.append(new_contributor)
     for _ in range(n_projects):
         # Read projects info
-        # TODO
+        line = next(f_in)  # NEXT LINE
+        project_name, days, score, best_before, n_roles = [x for x in line.split()]
+        new_project = Project(project_name, days, score, best_before, n_roles)
+        for _ in range(n_roles):
+            # Read project info
+            new_project.skills.append(Skill(skill_name, skill_level))
+        projects.append(new_project)
         pass
 
 
