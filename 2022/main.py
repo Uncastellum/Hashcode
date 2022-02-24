@@ -135,9 +135,9 @@ def main():
                 project.days -= 1
 
 
-        (active, outputProjects) = selector.elegirProyecto(projects, contributors)
+        (active, projects) = selector.elegirProyecto(projects, contributors)
+        print(len(active), len(activeProjects))
         activeProjects = activeProjects + active
-        projects = projects + outputProjects
 
         for i in range(len(projects), 0, -1):
             #print(i, indiceWhile)
