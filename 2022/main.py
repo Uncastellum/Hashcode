@@ -2,7 +2,6 @@ import os, sys
 import selector
 from radixsort import *
 
-
 files = [
     'a_an_example.in.txt',
     'b_better_start_small.in.txt',
@@ -37,6 +36,7 @@ class Contributor:
 
 class Project:
     def __init__(self, name, days, score, best_before, n_roles):
+        self.alex_score = 0
         self.name = name
         self.days = days
         self.score = score
@@ -44,6 +44,15 @@ class Project:
         self.n_roles = n_roles
         self.listaPersonas = []
         self.skills = {}
+
+    def calculate_score(self):
+
+        mean_skill = 0
+        for skill in self.skills.values():
+            mean_skill += skill
+        mean_skill /= len(self.skills)
+
+        self.alex_score = int(round(best_before * mean_skill))
 
 
 class ProjectProgram:
@@ -93,6 +102,7 @@ with open(input) as f_in:
             skill_name, skill_level = [x for x in next(f_in).split()]
             skill_level = int(skill_level)
             new_project.skills[skill_name] = int(skill_level)
+        new_project.calculate_score()
         projects.append(new_project)
         pass
 
@@ -111,7 +121,7 @@ def main():
     print(f"Writing to {output_file}")
 
     # Sort projects
-    radixSort(projects, lambda x: x.best_before)
+    radixSort(projects, lambda x: x.alex_score)
     print([x.best_before for x in projects])
     indiceWhile = 0
     activeProjects = []
@@ -137,21 +147,6 @@ def main():
 
         indiceWhile += 1
 
-
-    # Calculate solution
-    """
-    result = Result(n_projects)
-    # Iterate through projects
-    for project in projects:
-        # Assign contributors to project
-        print(f"Calculating {project.n_roles} contributors for project {project.name}")
-        new_project_program = ProjectProgram(project.name)
-        for i in range(project.n_roles):
-            new_project_program.contributors.append(contributors[i].name)
-        result.projects_programs.append(new_project_program)
-
-    result_to_file(result)
-    """
 
 
 if __name__ == '__main__':
