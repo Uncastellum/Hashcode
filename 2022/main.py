@@ -100,7 +100,7 @@ with open(input) as f_in:
 
 def result_to_file(res: Result):
     with open(output_file, 'w') as f_out:
-        f_out.write(str(res.n_projects))
+        f_out.write(str(res.n_projects) + '\n')
         for project_program in res.projects_programs:
             f_out.write(project_program.project_name + "\n")
             for contributor_name in project_program.contributors:
