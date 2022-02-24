@@ -103,7 +103,8 @@ def result_to_file(res: Result):
         for project_program in res.projects_programs:
             f_out.write(project_program.project_name + "\n")
             for contributor_name in project_program.contributors:
-                f_out.write(contributor_name + "\n")
+                f_out.write(contributor_name + " ")
+            f_out.write("\n")
 
 def main():
     print(f"Reading from {input}")
