@@ -28,7 +28,12 @@ def proyectSelector(proyecto, listaPersonas):
 
 def elegirProyecto(listaProyectos, listaPersonas):
     proyectOutput = []
+    proyectAvaliable = []
     for proyecto in listaProyectos:
         if proyectSelector(proyecto, listaPersonas):
             proyectOutput.append(proyecto)
-    return proyectOutput
+        else:
+            proyectAvaliable.append(proyecto)
+    return proyectOutput, proyectAvaliable
+
+    
