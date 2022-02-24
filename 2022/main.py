@@ -1,4 +1,5 @@
 import os, sys
+from radixsort import *
 
 files = [
     'a_an_example.in.txt',
@@ -107,9 +108,14 @@ def result_to_file(res: Result):
 def main():
     print(f"Reading from {input}")
     print(f"Writing to {output_file}")
-    # Calculate solution
-    result = Result(n_projects)
 
+    # Sort projects
+    radixSort(projects, lambda x: x.best_before)
+    print([x.best_before for x in projects])
+
+    # Calculate solution
+
+    result = Result(n_projects)
     # Iterate through projects
     for project in projects:
         # Assign contributors to project
