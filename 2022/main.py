@@ -56,14 +56,6 @@ class Project:
         self.alex_score = int(round(best_before * mean_skill))
 
 
-class ProjectProgram:
-    project_name = ""
-    contributors = []
-
-    def __init__(self, project_name):
-        self.project_name = project_name
-        self.contributors = []
-
 class Result:
     #projects_programs = [ProjectProgram]
 
@@ -108,13 +100,13 @@ with open(input) as f_in:
         pass
 
 
-def result_to_file(res: Result):
+def result_to_file(output):
     with open(output_file, 'w') as f_out:
-        f_out.write(str(res.n_projects) + '\n')
-        for project_program in res.projects_programs:
-            f_out.write(project_program.project_name + "\n")
-            for contributor_name in project_program.contributors:
-                f_out.write(contributor_name + " ")
+        f_out.write(str(len(output)) + '\n')
+        for project in output:
+            f_out.write(project.name + "\n")
+            for person in project.listaPersonas:
+                f_out.write(person.name + " ")
             f_out.write("\n")
 
 def main():
@@ -128,19 +120,7 @@ def main():
     selector.elegirProyecto(projects, contributors)
 
     # Calculate solution
-    """
-    result = Result(n_projects)
-    # Iterate through projects
-    for project in projects:
-        # Assign contributors to project
-        print(f"Calculating {project.n_roles} contributors for project {project.name}")
-        new_project_program = ProjectProgram(project.name)
-        for i in range(project.n_roles):
-            new_project_program.contributors.append(contributors[i].name)
-        result.projects_programs.append(new_project_program)
-
-    result_to_file(result)
-    """
+    result_to_file(output)
 
 
 if __name__ == '__main__':
