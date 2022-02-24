@@ -131,3 +131,5 @@ dmypy.json
 
 #Output files
 *.out
+
+.idea
