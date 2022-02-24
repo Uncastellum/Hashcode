@@ -1,4 +1,5 @@
 import os, sys
+from radixsort import *
 
 files = [
     'a_an_example.in.txt',
@@ -58,27 +59,31 @@ with open(input) as f_in:
         line = next(f_in)  # NEXT LINE
         contributor_name, n_skills = [x for x in line.split()]
         new_contributor = Contributor(contributor_name)
-        for _ in range(n_skills):
+        for _ in range(int(n_skills)):
             # Read skills from contributor
             line = next(f_in)  # NEXT LINE
             skill_name, skill_level = [x for x in line.split()]
-            new_contributor.skills.append(Skill(skill_name, skill_level))
+            new_contributor.skills.append(Skill(skill_name, int(skill_level)))
         # Add contributor
         contributors.append(new_contributor)
     for _ in range(n_projects):
         # Read projects info
         line = next(f_in)  # NEXT LINE
         project_name, days, score, best_before, n_roles = [x for x in line.split()]
-        new_project = Project(project_name, days, score, best_before, n_roles)
-        for _ in range(n_roles):
+        new_project = Project(project_name, int(days), int(score), int(best_before), int(n_roles))
+        for _ in range(int(n_roles)):
             # Read project info
-            new_project.skills.append(Skill(skill_name, skill_level))
+            line = next(f_in)
+            skill_name, skill_level = [x for x in line.split()]
+            new_project.skills.append(Skill(skill_name, int(skill_level)))
         projects.append(new_project)
         pass
 
 
 def main():
     # Calculate solution
+    radixSort(projects, lambda x: x.best_before)
+    print([x.best_before for x in projects])
     pass
 
 
