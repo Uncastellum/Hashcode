@@ -109,6 +109,7 @@ def result_to_file(output):
             f_out.write("\n")
 
 def main():
+    global projects
     print(f"Reading from {input}")
     print(f"Writing to {output_file}")
 
@@ -117,28 +118,39 @@ def main():
     print([x.best_before for x in projects])
     indiceWhile = 0
     activeProjects = []
+    active = []
     output = []
+    outputProjects = []
     while(len(projects) != 0):
-
+        print(activeProjects)
         for project in activeProjects:
-            if project.days <= 0:
-                for persona in project.personas:
-                    contributors.append(persona)
+            print(project.days)
 
+            if project.days <= 0:
+                for persona in project.listaPersonas:
+                    contributors.append(persona)
                 output.append(project)
+                activeProjects.remove(project)
             else:
                 project.days -= 1
 
 
-        (activeProjects,projects) = selector.elegirProyecto(projects, contributors)
+        (active, outputProjects) = selector.elegirProyecto(projects, contributors)
+        activeProjects = activeProjects + active
+        projects = projects + outputProjects
 
-        for i in range(len(projects), 0):
-            if projects[i].best_before < indiceWhile - projects[i].days:
-                projects.pop(i)
+        for i in range(len(projects), 0, -1):
+            #print(i, indiceWhile)
+            if projects[i-1].best_before < indiceWhile - projects[i-1].days:
+                projects.pop(i-1)
 
-
+        #print(len(projects))
         indiceWhile += 1
+        #print(output)
 
+
+
+    result_to_file(output)
 
 
 if __name__ == '__main__':
