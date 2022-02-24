@@ -37,6 +37,7 @@ class Contributor:
 
 class Project:
     def __init__(self, name, days, score, best_before, n_roles):
+        self.alex_score = 0
         self.name = name
         self.days = days
         self.score = score
@@ -44,6 +45,15 @@ class Project:
         self.n_roles = n_roles
         self.listaPersonas = []
         self.skills = {}
+
+    def calculate_score(self):
+
+        mean_skill = 0
+        for skill in self.skills.values():
+            mean_skill += skill
+        mean_skill /= len(self.skills)
+
+        self.alex_score = int(round(best_before * mean_skill))
 
 
 class ProjectProgram:
@@ -93,6 +103,7 @@ with open(input) as f_in:
             skill_name, skill_level = [x for x in next(f_in).split()]
             skill_level = int(skill_level)
             new_project.skills[skill_name] = int(skill_level)
+        new_project.calculate_score()
         projects.append(new_project)
         pass
 
@@ -111,8 +122,8 @@ def main():
     print(f"Writing to {output_file}")
 
     # Sort projects
-    radixSort(projects, lambda x: x.best_before)
-    print([x.best_before for x in projects])
+    radixSort(projects, lambda x: x.alex_score)
+    print([x.alex_score for x in projects])
 
     selector.elegirProyecto(projects, contributors)
 
